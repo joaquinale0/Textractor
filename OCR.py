@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from paddleocr import PaddleOCR
 
+nombre_archivo = "daotos.txt"
+
 class OCR:
     def __init__(self, ruta, idiomas):
         self.ruta_imagen = ruta     
@@ -50,10 +52,16 @@ class OCR:
     
     def confianza_promedio (self):
         prom = 0
-        for puntaje in self.confianza:
-            prom += puntaje
-        return prom/len(self.confianza)
-    
+        if(len(self.confianza) != 0):
+            for puntaje in self.confianza:
+                prom += puntaje
+            return prom/len(self.confianza)
+        else:
+            print("Error tamaño de la lista es 0")
+            return 0
+
+    def agregar_en_archivo (self):
+        pass
 
 class Easy(OCR):
     def __init__(self, ruta, idiomas=['es', 'en']):
@@ -97,11 +105,24 @@ class Easy(OCR):
                         self.texto.append(texto)
                         self.confianza.append(confianza)
 
+                            #         with open(nombre_archivo, 'w+') as archivo:
+                            # contenido = archivo.read()
+                            # print("Contenido leído del archivo:")
+                            # print(contenido)
+
         except FileNotFoundError as e:
             print(f"Error de PaddleOCR: No se encontró el archivo en la ruta: {e.filename}")
         except Exception as e:
             print(f"Otro error durante el OCR: {e}")
 
+    # def agregar_en_archivo (self):
+    #     try:
+    #         with open(nombre_archivo, 'w+') as archivo:
+    #             contenido = archivo.read()
+    #             print("Contenido leído del archivo:")
+    #             print(contenido)
+    #     except:
+    #         print("error al abrir el arhivo")
 
 class Paddle(OCR):
     def __init__(self, ruta, idiomas=['es', 'en']):
@@ -127,21 +148,21 @@ class Paddle(OCR):
     
 
 
-if __name__ == "__main__":
-    ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_manuscrita_diagonal.jpg"
+# if __name__ == "__main__":
+#     ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_github_en.png"
     
-    # ocr = Easy(ruta_imagen)
-    ocr = Paddle(ruta_imagen)
+#     ocr = Easy(ruta_imagen)
+#     # ocr = Paddle(ruta_imagen)
 
-    ocr.habilitar_OCR()
-    resultados = ocr.realizar_ocr()
-    # print(f"resultados:\n{resultados}")
-    print(f"textos:\n{ocr.texto}")
-    print(f"confianza:\n{ocr.confianza}")
+#     ocr.habilitar_OCR()
+#     resultados = ocr.realizar_ocr()
+#     # print(f"resultados:\n{resultados}")
+#     print(f"textos:\n{ocr.texto}")
+#     print(f"confianza:\n{ocr.confianza}")
 
-    textos = ocr.texto_completo()
-    print(f"extraer texto:\n {textos}")
+#     textos = ocr.texto_completo()
+#     print(f"extraer texto:\n {textos}")
 
-    print(f"prom {ocr.confianza_promedio()}")
+#     print(f"prom {ocr.confianza_promedio()}")
 
 
