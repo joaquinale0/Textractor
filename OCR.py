@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from paddleocr import PaddleOCR
 
-nombre_archivo = "daotos.txt"
+nombre_archivo = "datos.txt"
 
 class OCR:
     def __init__(self, ruta, idiomas):
@@ -67,27 +67,14 @@ class OCR:
 class Easy(OCR):
     def __init__(self, ruta, idiomas=['es', 'en']):
         super().__init__(ruta, idiomas)
+        self.ocr = easyocr.Reader(self.idiomas)
 
     def realizar_ocr(self):
         try:
             if self.habilitado and self.nueva: 
 
                 # modificamos nueva para que no vuelva a utilizar recursos si el proceso ya se hizo una vez con la misma imagen
-                self.nueva = False
-
-                """
-                Realiza OCR en una imagen usando EasyOCR
-                
-                Args:
-                    ruta_imagen (str): Ruta a la imagen para procesar
-                    idiomas (list): Lista de idiomas para reconocer (códigos de 2 letras)
-                
-                Returns:
-                    list: Lista de resultados de OCR
-                """
-                # Inicializar el lector OCR con los idiomas especificados
-                print(f"Inicializando EasyOCR con idiomas: {self.idiomas}")
-                reader = easyocr.Reader(self.idiomas)
+                self.nueva = False              
                 
                 # Leer la imagen
                 print(f"Leyendo imagen: {self.ruta_imagen}")
@@ -98,7 +85,7 @@ class Easy(OCR):
                 
                 # Realizar OCR en la imagen
                 print("Procesando OCR...")
-                resultados = reader.readtext(imagen)
+                resultados = self.ocr.readtext(imagen)
                 
                 if resultados:
                     print("\nResultados OCR:")
@@ -128,20 +115,20 @@ class Easy(OCR):
 class Paddle(OCR):
     def __init__(self, ruta, idiomas=['es', 'en']):
         super().__init__(ruta, idiomas)
+        self.ocr = PaddleOCR(lang=self.idiomas)
 
     def realizar_ocr(self):
         try:
             if self.habilitado and self.nueva: 
-                # modificamos nueva para que no vuelva a utilizar recursos si el proceso ya se hizo una vez con la misma imagen
+                # modificamos nueva para que no vuelva a utilizar recursos 
+                # si el proceso ya se hizo una vez con la misma imagen
                 self.nueva = False
-                ocr = PaddleOCR(lang=self.idiomas)
-                result = ocr.predict(self.ruta_imagen)  
+                
+                result = self.ocr.predict(self.ruta_imagen)  
 
                 self.texto = result[0]["rec_texts"]
                 self.confianza = result[0]["rec_scores"]
 
-                # for idx, (text, score) in enumerate(zip(self.rec_texts, self.rec_scores)):
-                #     print(f"{idx+1}. {text} (confianza: {score:.2f})")
         except FileNotFoundError as e:
             print(f"Error de PaddleOCR: No se encontró el archivo en la ruta: {e.filename}")
         except Exception as e:

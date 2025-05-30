@@ -9,10 +9,8 @@ comienzo = time.time()
 def iniciar_easy(ruta_imagen, extracto, porcentaje):
     ocr = Easy(ruta_imagen)
     ocr.habilitar_OCR()
-    resultados = ocr.realizar_ocr()
-    print(f"textos:\n{ocr.texto}")
-    print(f"confianza:\n{ocr.confianza}")
-
+    ocr.realizar_ocr()
+    
     textos = ocr.texto_completo()
     extracto.append({'easy': textos})
     porcentaje.append({'easy': ocr.confianza_promedio()})
@@ -20,9 +18,7 @@ def iniciar_easy(ruta_imagen, extracto, porcentaje):
 def iniciar_paddle(ruta_imagen, extracto, porcentaje):
     ocr = Paddle(ruta_imagen)
     ocr.habilitar_OCR()
-    resultados = ocr.realizar_ocr()
-    print(f"textos:\n{ocr.texto}")
-    print(f"confianza:\n{ocr.confianza}")
+    ocr.realizar_ocr()
 
     textos = ocr.texto_completo()
     extracto.append({'paddle': textos})
@@ -34,7 +30,7 @@ if __name__ == '__main__':
     gramatica = Gramatica()
 
     # ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\RD-002-2025-EXA-UNSa_250529_093933_1.jpg"
-    ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_manuscrita_diagonal.jpg"
+    ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_ma_vertical.jpg"
     # ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_cartilla.jpg"
 
 
@@ -51,8 +47,6 @@ if __name__ == '__main__':
         easy.join()
         paddle.join()
 
-        print(f"\nporcentaje lista: {list(porcentaje)}")
-
         # Extraer los valores
         # Aquí se está extrayendo el valor de confianza del OCR Easy de la lista porcentaje.
         easy_conf = next((v['easy'] for v in porcentaje if 'easy' in v), None)
@@ -61,10 +55,13 @@ if __name__ == '__main__':
         easy_extr = next((v['easy'] for v in extracto if 'easy' in v), None)
         paddle_extr = next((v['paddle'] for v in extracto if 'paddle' in v), None)
 
+        print(f"Confianza: easyOCR={(easy_conf * 100):.2}% ")
+        print(f"Confianza: paddleOCR={(paddle_conf * 100):.2}% ")
+
         # Asegura que se encontraron ambos valores de confianza antes de compararlos.
         if easy_conf is not None and paddle_conf is not None:
             if easy_conf > paddle_conf:
-                print(f"Ganó Easy con {easy_conf}")
+                print(f"Ganó Easy con {(easy_conf * 100):.2}")
                 print(f"texto:\n {easy_extr}")
                 
                 gramatica.cambiar_texto(easy_extr)
@@ -72,7 +69,7 @@ if __name__ == '__main__':
                 print(f"corregido:\n {gramatica.get_texto_corregido()}")
                 
             else:
-                print(f"Ganó Paddle con {paddle_conf}")
+                print(f"Ganó Paddle con {(paddle_conf * 100):.2}")
                 print(f"texto:\n {paddle_extr}")
                 
                 gramatica.cambiar_texto(paddle_extr)
