@@ -14,6 +14,7 @@ class OCR:
         self.confianza = []         # lista del números de la confianza de cada elemento en la variable self.texto
         self.nueva = True           # tiene la funcion de negar la funcion de realizar ocr si ya lo habias ejecutado conla misma imagen
         self.idiomas = idiomas      
+        # self.gpu = gpu
 
     def habilitar_OCR(self):
         # Intento de abrir el archivo usando Python directamente
@@ -86,7 +87,7 @@ class Easy(OCR):
                 """
                 # Inicializar el lector OCR con los idiomas especificados
                 print(f"Inicializando EasyOCR con idiomas: {self.idiomas}")
-                reader = easyocr.Reader(self.idiomas, gpu=False)
+                reader = easyocr.Reader(self.idiomas)
                 
                 # Leer la imagen
                 print(f"Leyendo imagen: {self.ruta_imagen}")
@@ -149,10 +150,11 @@ class Paddle(OCR):
 
 
 # if __name__ == "__main__":
-#     ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_github_en.png"
-    
-#     ocr = Easy(ruta_imagen)
-#     # ocr = Paddle(ruta_imagen)
+#     # ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_github_en.png"
+#     ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\RD-002-2025-EXA-UNSa_250529_093933_1.jpg"
+
+#     # ocr = Easy(ruta_imagen)
+#     ocr = Paddle(ruta_imagen)
 
 #     ocr.habilitar_OCR()
 #     resultados = ocr.realizar_ocr()

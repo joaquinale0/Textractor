@@ -2,6 +2,9 @@ from OCR import *
 import multiprocessing as mp
 from multiprocessing import Process
 from Gramatica import Gramatica
+import time
+
+comienzo = time.time()
 
 def iniciar_easy(ruta_imagen, extracto, porcentaje):
     ocr = Easy(ruta_imagen)
@@ -30,7 +33,10 @@ if __name__ == '__main__':
     # mejora la graatica y correcciones del texto
     gramatica = Gramatica()
 
-    ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_manuscrita.jpg"
+    # ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\RD-002-2025-EXA-UNSa_250529_093933_1.jpg"
+    ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_manuscrita_diagonal.jpg"
+    # ruta_imagen = r"C:\Users\Joa7\Documents\Joa\Introduccion Software Libre\TP4 app\img\img_cartilla.jpg"
+
 
     with mp.Manager() as manager:
         extracto = manager.list()
@@ -74,3 +80,6 @@ if __name__ == '__main__':
                 print(f"corregido:\n {gramatica.get_texto_corregido()}")
         else:
             print("No se pudo obtener la confianza de ambos OCR.")
+
+        fin = time.time()
+        print(f"duracion = {fin - comienzo:.2f} segundos")
